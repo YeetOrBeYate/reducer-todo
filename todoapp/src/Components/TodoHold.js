@@ -4,7 +4,7 @@ import Todo from "./Todo";
 function Reducer(state, action){
     switch(action.type){
         case "ADD":
-            return [state, action.payload]
+            return [...state, action.payload]
     }
 }
 
@@ -18,16 +18,22 @@ const initialState = [
 
 const TodoHold = () =>{
     const [state, dispatch] = React.useReducer(Reducer, initialState);
-    const [input, setInput] = React.useState("default")
+    const [input, setInput] = React.useState("")
 
-  const handleType = (e) =>{
+    const handleType = (e) =>{
         setInput(e.target.value)
+    }
+
+    const addTodo = (e)=>{
+        e.preventDefault();
+        dispatch({type:"ADD", payload:{todo: input, id: Date.now(), done:false }})
     }
     return(
         <div>
             <form>
                 <label>Type here scrub:</label>
                 <input type="text" value={input} onChange = {handleType} name="todo"/>
+                <button onClick = {addTodo}>Add shit</button>
             </form>
             {state.map((t)=>(
                 <Todo todo={t.todo}/>
