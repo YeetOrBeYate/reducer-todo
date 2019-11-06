@@ -7,9 +7,15 @@ function Reducer(state, action){
             return [...state, action.payload];
         case "TOGGLE":
             return state.map((todo)=>{
-                if(todo.id === action.ID){
+                if(todo.id === action.payload){
                   return  {...todo, done : !todo.done}
                 }else{
+                    return todo;
+                }
+            });
+        case "CLEAR":
+            return state.filter((todo)=>{
+                if(!todo.done){
                     return todo;
                 }
             })
@@ -43,8 +49,13 @@ const TodoHold = () =>{
         dispatch({type:"ADD", payload:yeet})
     }
 
+    const clearTodo = (e)=>{
+        e.preventDefault();
+        dispatch({type:"CLEAR"})
+    }
+
     const toggle = (id)=>{
-        dispatch({type:"TOGGLE", ID:id})
+        dispatch({type:"TOGGLE", payload:id})
         
     }
     return(
@@ -57,6 +68,7 @@ const TodoHold = () =>{
             {state.map((t)=>(
                 <Todo todo={t.todo} id={t.id} toggle = {toggle} status = {t.done}/>
             ))}
+            <button onClick={clearTodo}>Clear Completed</button>
         </div>
     );
 }
