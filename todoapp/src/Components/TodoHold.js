@@ -1,37 +1,11 @@
 import React from 'react';
 import Todo from "./Todo";
+import {Reducer} from "../Reduce/Reducer"
+import {InitialState} from "../Reduce/Reducer"
 
-function Reducer(state, action){
-    switch(action.type){
-        case "ADD":
-            return [...state, action.payload];
-        case "TOGGLE":
-            return state.map((todo)=>{
-                if(todo.id === action.payload){
-                  return  {...todo, done : !todo.done}
-                }else{
-                    return todo;
-                }
-            });
-        case "CLEAR":
-            return state.filter((todo)=>{
-                if(!todo.done){
-                    return todo;
-                }
-            })
-    }
-}
-
-const initialState = [
-    {
-        todo:"Clean Bathroom",
-        id:1,
-        done:false
-    }
-]
 
 const TodoHold = () =>{
-    const [state, dispatch] = React.useReducer(Reducer, initialState);
+    const [state, dispatch] = React.useReducer(Reducer, InitialState);
     const [input, setInput] = React.useState("")
 
 
@@ -47,17 +21,20 @@ const TodoHold = () =>{
             done:false
         }
         dispatch({type:"ADD", payload:yeet})
+        setInput("")
     }
 
     const clearTodo = (e)=>{
         e.preventDefault();
         dispatch({type:"CLEAR"})
+        
     }
 
     const toggle = (id)=>{
         dispatch({type:"TOGGLE", payload:id})
-        
     }
+
+
     return(
         <div>
             <form>
