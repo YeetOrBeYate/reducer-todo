@@ -4,7 +4,15 @@ import Todo from "./Todo";
 function Reducer(state, action){
     switch(action.type){
         case "ADD":
-            return [...state, action.payload]
+            return [...state, action.payload];
+        case "TOGGLE":
+            return state.map((todo)=>{
+                if(todo.id === action.ID){
+                  return  {...todo, done : !todo.done}
+                }else{
+                    return todo;
+                }
+            })
     }
 }
 
@@ -20,22 +28,24 @@ const TodoHold = () =>{
     const [state, dispatch] = React.useReducer(Reducer, initialState);
     const [input, setInput] = React.useState("")
 
+
     const handleType = (e) =>{
         setInput(e.target.value)
     }
 
     const addTodo = (e)=>{
         e.preventDefault();
-        dispatch({type:"ADD", payload:{todo: input, id: Date.now(), done:false }})
+        let yeet ={
+            todo: input,
+            id: Date.now(),
+            done:false
+        }
+        dispatch({type:"ADD", payload:yeet})
     }
 
     const toggle = (id)=>{
-        state.map((todo)=>{
-            if(todo.id === id){
-                todo.done = !todo.done;
-            }
-        })
-        console.log(state);
+        dispatch({type:"TOGGLE", ID:id})
+        
     }
     return(
         <div>
@@ -45,7 +55,7 @@ const TodoHold = () =>{
                 <button onClick = {addTodo}>You know what to do </button>
             </form>
             {state.map((t)=>(
-                <Todo todo={t.todo} id={t.id} toggle = {toggle}/>
+                <Todo todo={t.todo} id={t.id} toggle = {toggle} status = {t.done}/>
             ))}
         </div>
     );
